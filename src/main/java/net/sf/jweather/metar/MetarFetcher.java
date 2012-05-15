@@ -22,11 +22,15 @@ package net.sf.jweather.metar;
 
 import java.io.IOException;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpRecoverableException;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -65,34 +69,33 @@ public class MetarFetcher {
 		metarData = null;
 
 		// create the http client
-		HttpClient client = new HttpClient();
+		HttpClient client = new DefaultHttpClient();
 
 		// set the timeout is specified
 		if (timeout != 0) {
 			log.debug("MetarFetch: setting timeout to '" + timeout
 					+ "' milliseconds");
 			long start = System.currentTimeMillis();
-			client.setConnectionTimeout(timeout);
+			// FIXME client.setConnectionTimeout(timeout);
 			long end = System.currentTimeMillis();
 			if (end - start < timeout) {
-				client.setTimeout((int) (end - start));
+				// FIXME client.setTimeout((int) (end - start));
 			} else {
 				return null;
 			}
 		}
 
 		// create the http method we will use
-		HttpMethod method = new GetMethod(httpMetarURL + station + ".TXT");
-
+		HttpGet method = new HttpGet(httpMetarURL + station + ".TXT");
 		// connect to the NOAA site, retrying up to the specified num
-		int statusCode = -1;
+		HttpResponse statusCode = null;
 		// for (int attempt = 0; statusCode == -1 && attempt < 3; attempt++) {
 		try {
 			// execute the get method
 			log.debug("MetarFetcher: downloading data for station '" + station
 					+ "'");
-			statusCode = client.executeMethod(method);
-		} catch (HttpRecoverableException e) {
+			statusCode = client.execute(method);
+		} catch (ClientProtocolException e) {
 			log.error("a recoverable exception occurred, " + "retrying."
 					+ e.getMessage());
 		} catch (IOException e) {
@@ -101,14 +104,15 @@ public class MetarFetcher {
 		// }
 
 		// check that we didn't run out of retries
-		if (statusCode != HttpStatus.SC_OK) {
+		if (statusCode.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
 			log.error("failed to download station data for '" + station + "'");
 			return null;
 		} else {
-			// read the response body
-			byte[] responseBody;
+			HttpEntity entity = statusCode.getEntity();
 			try {
-				responseBody = method.getResponseBody();
+				metarData = EntityUtils.toString(entity) + "\n";
+			} catch (ParseException e) {
+				throw new RuntimeException(e);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -116,9 +120,6 @@ public class MetarFetcher {
 			// release the connection
 			method.releaseConnection();
 
-			// deal with the response.
-			// FIXME - ensure we use the correct character encoding here
-			metarData = new String(responseBody) + "\n";
 			log.debug("MetarFetcher: metar data: " + metarData);
 		}
 

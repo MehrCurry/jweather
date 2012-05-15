@@ -75,14 +75,10 @@
   </distributionManagement>
   <dependencies>
     <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.8</version>
-    </dependency>
-    <dependency>
       <groupId>oro</groupId>
       <artifactId>oro</artifactId>
       <version>2.0.7</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -91,9 +87,21 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>commons-httpclient</groupId>
-    	<artifactId>commons-httpclient</artifactId>
-    	<version>3.1</version>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>jcl-over-slf4j</artifactId>
+    	<version>${slf4j.version}</version>
+    	<scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>log4j-over-slf4j</artifactId>
+    	<version>${slf4j.version}</version>
+    	<scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.apache.httpcomponents</groupId>
+    	<artifactId>httpclient</artifactId>
+    	<version>4.2-beta1</version>
     </dependency>
   </dependencies>
   <build>
@@ -161,6 +169,7 @@
 	</reporting>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<slf4j.version>[1.6,)</slf4j.version>
 	</properties>
 	<packaging>bundle</packaging>
 </project>
