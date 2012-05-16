@@ -20,7 +20,7 @@ For more information, please email arimus@users.sourceforge.net
 */
 package net.sf.jweather;
 
-import net.sf.jweather.metar.*;
+import net.sf.jweather.metar.Metar;
 
 public class Test {
 	static String station = "KLAX";

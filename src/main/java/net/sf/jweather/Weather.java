@@ -20,10 +20,11 @@ For more information, please email arimus@users.sourceforge.net
 */
 package net.sf.jweather;
 
-import java.io.*;
-import java.net.*;
+import net.sf.jweather.metar.Metar;
+import net.sf.jweather.metar.MetarFetcher;
+import net.sf.jweather.metar.MetarParser;
+
 import org.apache.log4j.Logger;
-import net.sf.jweather.metar.*;
 
 /**
  * Responsible for downloading the METAR reports and feeding them to the Metar

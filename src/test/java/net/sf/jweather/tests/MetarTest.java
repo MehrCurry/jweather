@@ -20,10 +20,14 @@ For more information, please email arimus@users.sourceforge.net
 */
 package net.sf.jweather.tests;
 
-import net.sf.jweather.metar.*;
-import junit.framework.TestCase;
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import junit.framework.TestCase;
+import net.sf.jweather.metar.Metar;
+import net.sf.jweather.metar.MetarParser;
+import net.sf.jweather.metar.SkyCondition;
+import net.sf.jweather.metar.WeatherCondition;
 
 public class MetarTest extends TestCase {
   Metar metar = null;

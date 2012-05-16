@@ -102,6 +102,17 @@
     	<groupId>org.apache.httpcomponents</groupId>
     	<artifactId>httpclient</artifactId>
     	<version>4.2-beta1</version>
+    	<exclusions>
+    		<exclusion>
+    			<artifactId>commons-logging</artifactId>
+    			<groupId>commons-logging</groupId>
+    		</exclusion>
+    	</exclusions>
+    </dependency>
+    <dependency>
+    	<groupId>ch.qos.logback</groupId>
+    	<artifactId>logback-classic</artifactId>
+    	<version>1.0.1</version>
     </dependency>
   </dependencies>
   <build>

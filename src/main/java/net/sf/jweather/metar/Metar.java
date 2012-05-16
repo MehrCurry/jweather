@@ -20,9 +20,10 @@ For more information, please email arimus@users.sourceforge.net
 */
 package net.sf.jweather.metar;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 
 /**
